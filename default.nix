@@ -65,11 +65,14 @@ EOF
     # Function dependency analysis
     analyzeFunctionDeps = text: pkgs.runCommand "function-deps-analysis"
       { buildInputs = [ pkgs.bash pkgs.gnugrep pkgs.gawk ]; } ''
+      cat > script-content.txt << 'EOF'
+${text}
+EOF
       cat > analyze.sh << 'EOF'
 #!/usr/bin/env bash
 
 # Extract function definitions and calls from script
-script_text='${text}'
+script_text=$(cat script-content.txt)
 
 echo "=== Function Dependency Analysis ===" > analysis.txt
 echo >> analysis.txt
@@ -115,10 +118,13 @@ EOF
     # Variable usage analysis
     analyzeVariableUsage = text: pkgs.runCommand "variable-usage-analysis"
       { buildInputs = [ pkgs.bash pkgs.gnugrep pkgs.gawk ]; } ''
+      cat > script-content.txt << 'EOF'
+${text}
+EOF
       cat > analyze-vars.sh << 'EOF'
 #!/usr/bin/env bash
 
-script_text='${text}'
+script_text=$(cat script-content.txt)
 
 echo "=== Variable Usage Analysis ===" > var-analysis.txt
 echo >> var-analysis.txt

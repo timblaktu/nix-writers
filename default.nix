@@ -138,7 +138,7 @@ echo "$script_text" | grep -oE '^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_]*=' | \
 echo >> var-analysis.txt
 echo "Environment variables referenced:" >> var-analysis.txt
 echo "$script_text" | grep -oE '\$\{[a-zA-Z_][a-zA-Z0-9_]*[^}]*\}|\$[a-zA-Z_][a-zA-Z0-9_]*' | \
-  sed 's/^\${\([^}]*\)}.*/\1/; s/^\$\([a-zA-Z_][a-zA-Z0-9_]*\).*/\1/' | \
+  sed 's/^\$[{]//; s/[}].*$//; s/^\$//; s/[^a-zA-Z0-9_].*$//' | \
   grep -vE '^[0-9]+$|^\*$|^@$|^\$$|^\?$|^!$' | \
   sort -u | sed 's/^/  - /' >> var-analysis.txt || true
 
